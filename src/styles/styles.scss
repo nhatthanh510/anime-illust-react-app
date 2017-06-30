@@ -1,0 +1,163 @@
+@import 'variables';
+
+/*Metronic Override*/
+
+body.page-md {
+    font-family: 'Roboto', sans-serif;
+    background-color: $gray-background;
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+        font-family: 'Roboto', sans-serif;
+    } //Navigation
+    .page-header.navbar {
+        .page-header-inner {
+            .page-logo {
+                background: $white-primary;
+                .menu-toggler {
+                    i {
+                        font-size: 16px;
+                        color: $gray-cascade;
+                        float: right;
+                        margin-top: 2px;
+                    }
+                }
+                .logo-default {
+                    width: 180px;
+                    margin-top: 22px;
+                }
+            }
+            .page-top {
+                .top-menu {
+                    ul.nav {
+                        li {
+                            a {
+                                padding-left: 10px;
+                                padding-right: 10px;
+                            }
+                            &.play-store-item {
+                                a {
+                                    img {
+                                        width: 130px;
+                                    }
+                                }
+                            }
+                            &.app-store-item {
+                                a {
+                                    img {
+                                        width: 115px;
+                                        margin-top: 8px;
+                                    }
+                                }
+                            }
+                            &.windows-store-item {
+                                a {
+                                    img {
+                                        width: 95px;
+                                        margin-top: 7px;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    } //Sidebar
+    .page-container {
+        .page-sidebar-wrapper {
+            .page-sidebar {
+                background-color: $white-primary;
+                .page-sidebar-menu {
+                    margin-top: 0;
+                    li {
+                        a {
+                            color: $black-text;
+                            border-top: 1px solid $gray-border;
+                            transition: all 0.1s ease-in;
+                            i {
+                                color: $black-text;
+                            }
+                        }
+                        &.active,
+                        &:hover {
+                            a {
+                                color: $white-primary;
+                                background: $red-primary;
+                                margin-left: -3px;
+                                padding-left: 15px;
+                                border-left: 3px solid $black-primary !important;
+                                i {
+                                    color: $white-primary;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    } //Grid layout
+    .page-content {
+        padding-top: 0;
+        .page-head {
+            margin-bottom: 10px;
+            padding: 12px 20px;
+            background-color: #fff;
+            box-shadow: 0px 2px 3px 2px rgba(0, 0, 0, 0.03);
+            .page-title {
+                padding-bottom: 5px;
+                h1 {
+                    color: $black-text;
+                    span {
+                        vertical-align: sub;
+                        margin-right: 10px;
+                    }
+                    .input-icon {
+                        display: inline-block;
+                    }
+                }
+            }
+            .page-toolbar {
+                padding: 5px 0 10px;
+                .btn-group {
+                    .portlet-input {
+                        float: left;
+                    }
+                    .btn {
+                        margin-left: 10px;
+                    }
+                }
+            }
+        }
+        .container-fluid {
+            .row {
+                .portlet {
+                    .portlet-title {
+                        .caption {
+                            .img-circle {
+                                margin-right: 10px;
+                            }
+                        }
+                        .caption-right {
+                            float: right;
+                            margin-top: 10px;
+                        }
+                    }
+                    .portlet-body {
+                        max-height: 236px;
+                        overflow-y: hidden;
+                        img.illust-thumbnail {
+                            width: 100%;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    .react-datepicker__input-container {
+        width: 100%;
+    }
+}
