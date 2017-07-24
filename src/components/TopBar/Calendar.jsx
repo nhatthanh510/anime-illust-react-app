@@ -11,7 +11,7 @@ class Calendar extends Component {
     return(
           <div className="page-title">
             <h1 className="font-red-mint">
-              <span className="bold">Daily Rankings</span>
+              <span className="bold">{this.props.title}</span>
               <div className="input-icon right">
                 <i className="fa fa-calendar" />
                 <DatePicker

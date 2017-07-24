@@ -8,7 +8,7 @@ function topBarHOC(...WrappedComponents) {
     }
 
     createSubComponent = (SubComponent) => {
-      return <SubComponent/>;
+      return <SubComponent {...this.props}/>;
     };
 
     createSubComponents = (SubComponents) => {

@@ -19,7 +19,7 @@ body.page-md {
                 background: $white-primary;
                 .menu-toggler {
                     i {
-                        font-size: 16px;
+                        font-size: $font16;
                         color: $gray-cascade;
                         float: right;
                         margin-top: 2px;
@@ -132,7 +132,7 @@ body.page-md {
                 }
             }
         }
-        .container-fluid {
+        .grid-layout {
             .row {
                 .portlet {
                     .portlet-title {
@@ -147,10 +147,11 @@ body.page-md {
                         }
                     }
                     .portlet-body {
-                        max-height: 236px;
                         overflow-y: hidden;
                         img.illust-thumbnail {
-                            width: 100%;
+                            object-fit: cover;
+                            width: 230px;
+                            height: 230px;
                         }
                     }
                 }
@@ -159,5 +160,126 @@ body.page-md {
     }
     .react-datepicker__input-container {
         width: 100%;
+    } // Slick Slider
+    .slick-slider {
+        .slick-slide {
+            img {
+                -webkit-user-drag: none;
+                -khtml-user-drag: none;
+                -moz-user-drag: none;
+                -o-user-drag: none;
+                user-drag: none;
+            }
+        }
+    }
+    .slick-prev {
+        width: 30px;
+        height: 30px;
+        &:before {
+            font-size: 30px;
+            content: "\f104";
+            font-family: FontAwesome;
+            color: $gray-cascade;
+        }
+    }
+    .slick-next {
+        width: 30px;
+        height: 30px;
+        &:before {
+            font-size: 30px;
+            content: "\f105";
+            font-family: FontAwesome;
+            color: $gray-cascade;
+        }
+    }
+}
+
+//Ranking Detail Styles
+.ranking-detail {
+    .primary-image {
+        background: $white-primary;
+        img {
+            margin: 0 auto;
+        }
+        .slick-dots {
+            bottom: -20px;
+        }
+    }
+    .image-info {
+        .portlet-title {
+            .caption-subject {
+                margin-left: 5px;
+            }
+        }
+        .portlet-body {
+            .total-view {
+                text-align: center;
+                margin-bottom: 10px;
+                i {
+                    color: $red-primary;
+                    margin: 0 30px;
+                    font-size: $font16;
+                }
+            }
+            .tag-label,
+            .artist-illust-label {
+                color: $red-primary;
+            }
+            .tags {
+                .label {
+                    background-color: $red-primary;
+                    color: $white-primary;
+                    display: inline-block;
+                    font-size: $font12;
+                    margin: 5px;
+                    padding: 5px;
+                }
+            }
+            .slick-slider {
+                .slider-item {
+                    padding: 0 5px;
+                    img {
+                        object-fit: cover;
+                        width: 103px;
+                        height: 103px;
+                        @media #{$mobile-screen} {
+                            width: 130px;
+                            height: 130px;
+                            margin: 0 auto;
+                        }
+                    }
+                }
+                .slick-prev {
+                    left: -22px;
+                }
+                .slick-next {
+                    right: -22px;
+                }
+            }
+        }
+    }
+    .related-works {
+        .caption-subject {
+            color: $red-primary;
+        }
+        .portlet.light {
+            .portlet-body {
+                .portlet.light {
+                    box-shadow: 0px 2px 3px 2px rgba(0, 0, 0, 0.1);
+                }
+            }
+        }
+    }
+}
+
+// Profile Styles
+.profile {
+    .profile-sidebar-portlet {
+        margin-bottom: 0;
+        .profile-usertitle-name {
+            padding-bottom: 5px;
+            color: $black-text;
+            font-weight: bold;
+        }
     }
 }

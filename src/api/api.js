@@ -1,6 +1,8 @@
 /**
  * Created by admin on 6/28/2017.
  */
+const axios = require('axios');
+
 let data = [
   {
     avatar: './images/test/avatar.png',
@@ -52,10 +54,22 @@ let data = [
   }
 ];
 
-export default () => {
+function getImage() {
   return new Promise((resolve, reject) => {
     setTimeout(() => {
       return resolve(data);
     }, 3000);
   });
+}
+
+function searchGif() {
+  let promiseObj = axios.get('/v1/tenor/search');
+  return promiseObj.then(function (res) {
+    return res.data.results;
+  });
+}
+
+export default {
+  getImage,
+  searchGif
 };

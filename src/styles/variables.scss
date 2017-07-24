@@ -1,4 +1,6 @@
 /* Variables */
+
+//Color
 $red-primary: #EC2227;
 $black-primary: #000000;
 $white-primary: #FFFFFF;
@@ -8,3 +10,13 @@ $gray-cascade: #95A5A6;
 $gray-border: #E9EDEF;
 $gray-background: #E1E5EC;
 $blue-dark: #121a22;
+
+//Font size
+$font16: 16px;
+$font14: 14px;
+$font12: 12px;
+
+// Responsive break point
+$mobile-screen: "(max-width : 767px)";
+$tablet-screen: "(min-width: 768px) and (max-width : 1024px)";
+$desktop-screen: "(min-width : 1025px)";

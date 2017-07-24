@@ -1,22 +1,21 @@
 import webpack from 'webpack';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
-import autoprefixer from 'autoprefixer';
 import path from 'path';
-import ExtractTextPlugin from 'extract-text-webpack-plugin';
+//import ExtractTextPlugin from 'extract-text-webpack-plugin';
 
-const extractCSS = new ExtractTextPlugin('style-theme.css');
-const extractSASS = new ExtractTextPlugin('style-react.css');
+//const extractCSS = new ExtractTextPlugin('style-theme.css');
+//const extractSASS = new ExtractTextPlugin('style-react.css');
 
-export default {
+module.exports = {
   resolve: {
     extensions: ['*', '.js', '.jsx', '.json']
   },
   devtool: 'eval-source-map', // more info:https://webpack.github.io/docs/build-performance.html#sourcemaps and https://webpack.github.io/docs/configuration.html#devtool
   entry: [
     // must be first entry to properly set public path
+    'webpack-hot-middleware/client?reload=true',
     './src/webpack-public-path',
     'react-hot-loader/patch',
-    'webpack-hot-middleware/client?reload=true',
     'babel-polyfill',
     path.resolve(__dirname, 'src/index.js') // Defining path seems necessary for this to work consistently on Windows machines.
   ],
@@ -27,8 +26,6 @@ export default {
     filename: 'bundle.js'
   },
   plugins: [
-    extractCSS,
-    extractSASS,
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify('development'), // Tells React to build in either dev or prod modes. https://facebook.github.io/react/downloads.html (See bottom)
       __DEV__: true
@@ -53,8 +50,8 @@ export default {
       {test: /\.svg(\?v=\d+\.\d+\.\d+)?$/, loader: 'url-loader?limit=10000&mimetype=image/svg+xml'},
       {test: /\.(jpe?g|png|gif)$/i, loader: 'file-loader?name=[name].[ext]'},
       {test: /\.ico$/, loader: 'file-loader?name=[name].[ext]'},
-      //{test: /(\.css|\.scss|\.sass)$/, loaders: ['style-loader', 'css-loader', 'postcss-loader', 'sass-loader?sourceMap']},
-      {
+      {test: /(\.css|\.scss|\.sass)$/, loaders: ['style-loader', 'css-loader', 'sass-loader?sourceMap']}
+      /*{
         test: /\.css$/,
         use: extractCSS.extract([ 'css-loader' ])
       },
@@ -65,7 +62,7 @@ export default {
           //resolve-url-loader may be chained before sass-loader if necessary
           use: ['css-loader', 'sass-loader?sourceMap']
         })
-      }
+      }*/
     ]
   }
 };
