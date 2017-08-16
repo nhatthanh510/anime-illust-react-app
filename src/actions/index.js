@@ -34,15 +34,3 @@ export function fetchData() {
     }
   };
 }
-
-export function fetchGifData() {
-  return async (dispatch) => {
-    dispatch(getData());
-    try {
-      let data = await api.searchGif();
-      dispatch(getDataSuccess(data));
-    } catch (error) {
-      console.log('err:', error);
-    }
-  };
-}

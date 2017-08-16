@@ -20,6 +20,11 @@ class Ranking extends React.Component {
             this.props.fetchData();
         }
     }
+
+    search = (params) => {
+      alert(params.term);
+    };
+
     initGrid = () => {
         console.info('Init grid successfully');
         let gridData = {
@@ -62,7 +67,7 @@ class Ranking extends React.Component {
     render() {
         return (
             <div className="container-fluid grid-layout">
-                <RankedTopBar />
+                <RankedTopBar search={this.search}/>
                 <div>
                     {
                         this.props.myData.isFetching && <div>Loading</div>

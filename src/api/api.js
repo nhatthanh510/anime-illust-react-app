@@ -55,21 +55,58 @@ let data = [
 ];
 
 function getImage() {
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     setTimeout(() => {
       return resolve(data);
     }, 3000);
   });
 }
 
-function searchGif() {
-  let promiseObj = axios.get('/v1/tenor/search');
-  return promiseObj.then(function (res) {
-    return res.data.results;
-  });
+async function searchGif(params) {
+  let searchUrl = '/v1/tenor/search';
+  if (params && params.pos) {
+    searchUrl += `?pos=${params.pos}`;
+  }
+
+  if (params && params.term) {
+    searchUrl += `?tag=${params.term}`;
+  }
+
+  let result = await axios.get(searchUrl);
+  return result.data;
+}
+
+async function getGifDetail(id) {
+  let result = await axios.get('/v1/tenor/gif?ids=' + id);
+  return result.data.results;
+}
+
+
+async function getAutoComplete(params) {
+  let searchUrl = 'v1/tenor/autocomplete';
+
+  if (params && params.pos) {
+    searchUrl += `?pos=${params.pos}`;
+  }
+
+  if (params && params.term) {
+    searchUrl += `?tag=${params.term}`;
+  }
+
+  let result = await axios.get(searchUrl);
+  let responseObj = [];
+  result.data.results.map( (item) => {
+    responseObj.push({
+      value : item,
+      label : item
+    }) ;
+  } );
+  return responseObj;
 }
 
 export default {
   getImage,
-  searchGif
+  searchGif,
+  getGifDetail,
+  getAutoComplete
 };

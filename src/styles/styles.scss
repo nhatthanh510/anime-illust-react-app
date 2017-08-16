@@ -1,5 +1,51 @@
 @import 'variables';
 
+.anim-appear {
+    opacity: 0;
+}
+ 
+.anim-appear.anim-appear-active{
+    opacity: 1;
+    transition: opacity 1.5s ease-in;
+}
+
+.animdetailinfo-appear {
+    max-height: 0;
+    overflow: hidden;
+    -webkit-transition: max-height 2s;
+    -moz-transition: max-height 2s;
+    transition: max-height 2s;
+}
+ 
+.animdetailinfo-appear.animdetailinfo-appear-active{
+    max-height: 800px;
+}
+.gridLazyLoadingAnim-appear {
+    opacity: 0;
+}
+ 
+.gridLazyLoadingAnim-appear.gridLazyLoadingAnim-appear-active{
+    opacity: 1;
+    transition: opacity 0.7s ease-in;
+}
+// .anim-enter {
+//   opacity: 0.01;
+// }
+
+// .anim-enter.anim-enter-active {
+//   opacity: 1;
+//   transition: opacity 1s ease-in;
+// }
+
+// .anim-leave {
+//   opacity: 0.01;
+// }
+
+// .anim-leave.anim-leave-active {
+//   opacity: 1;
+//   transition: opacity 1s ease-in;
+// }
+
 /*Metronic Override*/
 
 body.page-md {
@@ -141,10 +187,6 @@ body.page-md {
                                 margin-right: 10px;
                             }
                         }
-                        .caption-right {
-                            float: right;
-                            margin-top: 10px;
-                        }
                     }
                     .portlet-body {
                         overflow-y: hidden;
@@ -152,10 +194,39 @@ body.page-md {
                             object-fit: cover;
                             width: 230px;
                             height: 230px;
+                            @media #{$mobile-screen} {
+                                width: 100%;
+                                height: auto;
+                            }
+                            @media #{$tablet-screen} {
+                                width: 310px;
+                                height: 310px;
+                            }
                         }
                     }
                 }
             }
+            .loader {
+                margin: 20px auto;
+                width: 100%;
+                text-align: center;
+                div > div {
+                    width: 12px;
+                    height: 12px;
+                    background-color: $red-primary;
+                    opacity: 0.8;
+                    &:after, &:before {
+                        background-color: $red-primary;
+                    }
+                }
+            }
+        }
+        .caption-right {
+            float: right;
+            margin-top: 10px;
+        }
+        .loader-60devs .loader-60devs-progress {
+            background: $red-primary;
         }
     }
     .react-datepicker__input-container {
@@ -194,8 +265,25 @@ body.page-md {
     }
 }
 
-//Ranking Detail Styles
-.ranking-detail {
+//Social Share Button Styles
+.bg-facebook {
+    background-color: #3B5998
+}
+.bg-twitter {
+    background-color: #1DA1F2 
+}
+.bg-googleplus {
+    background-color: #DB4437
+}
+.social-buttons {
+    div {
+        display: inline-block;
+        margin-left: 10px;
+    }
+}
+
+//Image Detail Styles
+.image-detail {
     .primary-image {
         background: $white-primary;
         img {
@@ -267,6 +355,35 @@ body.page-md {
                 .portlet.light {
                     box-shadow: 0px 2px 3px 2px rgba(0, 0, 0, 0.1);
                 }
+            }
+        }
+    }
+}
+
+//GIF Detail Styles
+.gif-detail {
+    .portlet.image-info {
+        .portlet-title {
+            .caption {
+                margin-top: 15px;
+                color: $red-primary;
+            }
+            .caption-right {
+                margin-top: 0;
+            }
+        }
+        .portlet-body {
+            .detail-info-title {
+                font-size: $font18;
+            }
+        }
+        .form-group {
+            margin-bottom: 20px;
+            label {
+                color: $black-text;
+            }
+            input.form-control {
+                cursor: text;
             }
         }
     }

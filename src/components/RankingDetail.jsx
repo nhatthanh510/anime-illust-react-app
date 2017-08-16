@@ -99,7 +99,7 @@ class RankingDetail extends React.Component {
     };
     render() {
         return (
-            <div className="container-fluid ranking-detail">
+            <div className="container-fluid image-detail">
                 <div className="row">
                     <div className="col-md-5">
                         <div className="portlet light primary-image">

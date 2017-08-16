@@ -1,4 +1,4 @@
 global.__base = __dirname + '/';
-global.__src = __base + 'src/';
-global.__apis = __src + 'api/';
+global.__server = __base + 'server/';
+global.__apis = __server + 'api/';
 global.__routers = __apis + 'routers/';

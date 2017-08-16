@@ -13,8 +13,9 @@ import './styles/styles.scss';
 import Layout from './components/Layout.jsx';
 import Feed from './components/Feed.jsx';
 import Ranking from './components/Ranking.jsx';
-import Gif from './components/Gif.jsx';
 import RankingDetail from './components/RankingDetail.jsx';
+import Gif from './components/Gif.jsx';
+import GifDetail from './components/GifDetail.jsx';
 import Profile from './components/Profile.jsx';
 
 //Applying Redux
@@ -29,8 +30,9 @@ ReactDOM.render(
               <IndexRoute component={Ranking} />
               <Route path="feed" component={Feed} />
               <Route path="ranking" component={Ranking} />
-              <Route path="gif" component={Gif} />
               <Route path="ranking-detail" component={RankingDetail}/>
+              <Route path="gif" component={Gif} />
+              <Route path="gif/detail/:id" component={GifDetail}/>
               <Route path="profile" component={Profile}/>
           </Route>
       </Router>
