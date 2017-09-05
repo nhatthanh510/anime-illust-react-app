@@ -9,15 +9,12 @@ import ImageView from './ImageView/ImageView.jsx';
 import SocialShareButtons from './SocialShare/SocialShareButtons.jsx';
 import Progress from "react-progress-2";
 import "react-progress-2/main.css";
-import "loaders.css/loaders.min.css";
 import InfiniteScroll from 'react-infinite-scroller';
 class GifDetail extends React.Component {
     constructor() {
         super();
         this.isLoadingMore = false;
     }
-
-
     componentDidMount() {
         this.props.fetchGifDetailData(this.props.params.id);
         this.props.fetchGifRelatedData(Math.floor(Math.random() * 500) + 1);
@@ -39,7 +36,7 @@ class GifDetail extends React.Component {
             Progress.show();
         }
         else if (this.props.gifData.dataFetched) {
-            Progress.hide();
+            Progress.hideAll();
             window.scrollTo(0, 0);
         }
     }

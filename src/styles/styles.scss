@@ -1,10 +1,9 @@
 @import 'variables';
-
 .anim-appear {
     opacity: 0;
 }
- 
-.anim-appear.anim-appear-active{
+
+.anim-appear.anim-appear-active {
     opacity: 1;
     transition: opacity 1.5s ease-in;
 }
@@ -16,31 +15,30 @@
     -moz-transition: max-height 2s;
     transition: max-height 2s;
 }
- 
-.animdetailinfo-appear.animdetailinfo-appear-active{
+
+.animdetailinfo-appear.animdetailinfo-appear-active {
     max-height: 800px;
 }
+
 .gridLazyLoadingAnim-appear {
     opacity: 0;
 }
- 
-.gridLazyLoadingAnim-appear.gridLazyLoadingAnim-appear-active{
+
+.gridLazyLoadingAnim-appear.gridLazyLoadingAnim-appear-active {
     opacity: 1;
     transition: opacity 0.7s ease-in;
 }
+
 // .anim-enter {
 //   opacity: 0.01;
 // }
-
 // .anim-enter.anim-enter-active {
 //   opacity: 1;
 //   transition: opacity 1s ease-in;
 // }
-
 // .anim-leave {
 //   opacity: 0.01;
 // }
-
 // .anim-leave.anim-leave-active {
 //   opacity: 1;
 //   transition: opacity 1s ease-in;
@@ -181,10 +179,14 @@ body.page-md {
         .grid-layout {
             .row {
                 .portlet {
+                    display: block;
                     .portlet-title {
                         .caption {
-                            .img-circle {
-                                margin-right: 10px;
+                            max-width: 70%;
+                            .caption-subject {
+                                white-space: nowrap;
+                                overflow: hidden;
+                                text-overflow: ellipsis;
                             }
                         }
                     }
@@ -203,19 +205,169 @@ body.page-md {
                                 height: 310px;
                             }
                         }
+                        .illust-container {
+                            position: relative;
+                            .illust-count {
+                                padding: 10px 15px;
+                                position: absolute;
+                                top: 0;
+                                color: white;
+                                right: 0;
+                                .illust-count-overlay {
+                                    position: absolute;
+                                    top: 0;
+                                    left: 0;
+                                    background: black;
+                                    width: 100%;
+                                    height: 100%;
+                                    opacity: 0.7;
+                                    border-radius: 5px;
+                                }
+                                .illust-count-content {
+                                    z-index: 1;
+                                    position: relative;
+                                    img {
+                                        width: 16px;
+                                        margin-right: 5px;
+                                    }
+                                }
+                            }
+                        }
+                        .bottom-info {
+                            color: $red-primary;
+                            .bookmark,
+                            .view {
+                                i {
+                                    margin-right: 2px;
+                                }
+                            }
+                        }
                     }
+                }
+                .grid-item-placeholder {
+                    background: #fff;
+                    border: 1px solid;
+                    border-color: #e5e6e9 #dfe0e4 #d0d1d5;
+                    border-radius: 3px;
+                    padding: 12px;
+                    margin: 0 auto;
+                    max-width: 100%;
+                    min-height: 275px;
+                    margin-bottom: 15px;
+                }
+                @keyframes placeHolderShimmer {
+                    0% {
+                        background-position: -468px 0
+                    }
+                    100% {
+                        background-position: 468px 0
+                    }
+                }
+                .animated-background {
+                    animation-duration: 1s;
+                    animation-fill-mode: forwards;
+                    animation-iteration-count: infinite;
+                    animation-name: placeHolderShimmer;
+                    animation-timing-function: linear;
+                    background: #f6f7f8;
+                    background: linear-gradient(to right, #eeeeee 8%, #dddddd 18%, #eeeeee 33%);
+                    background-size: 800px 104px;
+                    height: 96px;
+                    position: relative;
+                }
+                .background-masker {
+                    background: #fff;
+                    position: absolute;
+                }
+                /* Every thing below this is just positioning */
+                .background-masker.header-top,
+                .background-masker.header-bottom,
+                .background-masker.subheader-bottom {
+                    top: 0;
+                    left: 40px;
+                    right: 0;
+                    height: 10px;
+                }
+                .background-masker.header-left,
+                .background-masker.subheader-left,
+                .background-masker.header-right,
+                .background-masker.subheader-right {
+                    top: 10px;
+                    left: 40px;
+                    height: 8px;
+                    width: 10px;
+                }
+                .background-masker.header-bottom {
+                    top: 18px;
+                    height: 6px;
+                }
+                .background-masker.subheader-left,
+                .background-masker.subheader-right {
+                    top: 24px;
+                    height: 6px;
+                }
+                .background-masker.header-right,
+                .background-masker.subheader-right {
+                    width: auto;
+                    left: 300px;
+                    right: 0;
+                }
+                .background-masker.subheader-right {
+                    left: 230px;
+                }
+                .background-masker.subheader-bottom {
+                    top: 30px;
+                    height: 10px;
+                }
+                .background-masker.content-top,
+                .background-masker.content-second-line,
+                .background-masker.content-third-line,
+                .background-masker.content-second-end,
+                .background-masker.content-third-end,
+                .background-masker.content-first-end {
+                    top: 40px;
+                    left: 0;
+                    right: 0;
+                    height: 6px;
+                }
+                .background-masker.content-top {
+                    height: 20px;
+                }
+                .background-masker.content-first-end,
+                .background-masker.content-second-end,
+                .background-masker.content-third-end {
+                    width: auto;
+                    left: 380px;
+                    right: 0;
+                    top: 60px;
+                    height: 8px;
+                }
+                .background-masker.content-second-line {
+                    top: 68px;
+                }
+                .background-masker.content-second-end {
+                    left: 420px;
+                    top: 74px;
+                }
+                .background-masker.content-third-line {
+                    top: 82px;
+                }
+                .background-masker.content-third-end {
+                    left: 300px;
+                    top: 88px;
                 }
             }
             .loader {
                 margin: 20px auto;
                 width: 100%;
                 text-align: center;
-                div > div {
+                div>div {
                     width: 12px;
                     height: 12px;
                     background-color: $red-primary;
                     opacity: 0.8;
-                    &:after, &:before {
+                    &:after,
+                    &:before {
                         background-color: $red-primary;
                     }
                 }
@@ -223,7 +375,10 @@ body.page-md {
         }
         .caption-right {
             float: right;
-            margin-top: 10px;
+            i.fa,
+            .caption-subject {
+                color: $red-primary;
+            }
         }
         .loader-60devs .loader-60devs-progress {
             background: $red-primary;
@@ -269,16 +424,24 @@ body.page-md {
 .bg-facebook {
     background-color: #3B5998
 }
+
 .bg-twitter {
-    background-color: #1DA1F2 
+    background-color: #1DA1F2
 }
+
 .bg-googleplus {
     background-color: #DB4437
 }
+
 .social-buttons {
     div {
         display: inline-block;
         margin-left: 10px;
+        .socicon-btn.socicon-btn-circle {
+            i.fa {
+                color: white;
+            }
+        }
     }
 }
 
@@ -295,8 +458,14 @@ body.page-md {
     }
     .image-info {
         .portlet-title {
-            .caption-subject {
-                margin-left: 5px;
+            .caption {
+                margin-top: 15px;
+                .caption-subject {
+                    margin-left: 5px;
+                }
+                &.caption-right {
+                    margin-top: 0;
+                }
             }
         }
         .portlet-body {

@@ -30,7 +30,7 @@ ReactDOM.render(
               <IndexRoute component={Ranking} />
               <Route path="feed" component={Feed} />
               <Route path="ranking" component={Ranking} />
-              <Route path="ranking-detail" component={RankingDetail}/>
+              <Route path="ranking/detail/:id" component={RankingDetail}/>
               <Route path="gif" component={Gif} />
               <Route path="gif/detail/:id" component={GifDetail}/>
               <Route path="profile" component={Profile}/>

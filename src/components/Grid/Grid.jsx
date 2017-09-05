@@ -7,7 +7,7 @@ class Grid extends React.Component {
         super(props);
         this.renderRow = (props) => {
             let rows = [];
-            for (var i = 0; i < props.data.length; i += props.columns.columnsCount) {
+            for (let i = 0; i < props.data.length; i += props.columns.columnsCount) {
                 rows.push(<GridRow key={i} index={i} data={props.data} columns={props.columns} lazyloading={props.lazyloading} />);
             }
             return rows;

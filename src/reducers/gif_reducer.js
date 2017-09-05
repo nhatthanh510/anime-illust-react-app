@@ -1,7 +1,8 @@
 import {
     FETCHING_GIF_DATA, FETCHING_GIF_DETAIL, FETCHING_GIF_DATA_SUCCESS, FETCHING_GIF_DETAIL_SUCCESS,
     FETCHING_GIF_DATA_FAILURE, FETCHING_GIF_DETAIL_FAILURE, FETCHING_GIF_RELATED, FETCHING_GIF_RELATED_SUCCESS,
-    FETCHING_GIF_RELATED_FAILURE, FETCHING_GIF_RELATED_MORE, FETCHING_GIF_RELATED_MORE_SUCCESS, FETCHING_GIF_RELATED_MORE_FAILURE
+    FETCHING_GIF_RELATED_FAILURE, FETCHING_GIF_RELATED_MORE, FETCHING_GIF_RELATED_MORE_SUCCESS, FETCHING_GIF_RELATED_MORE_FAILURE,
+    FETCHING_GIF_DATA_MORE, FETCHING_GIF_DATA_MORE_SUCCESS, FETCHING_GIF_DATA_MORE_FAILURE
 } from '../actions/constants';
 const initialState = {
     data: [],
@@ -9,9 +10,11 @@ const initialState = {
     dataRelated: [],
     dataRelatedNext: '',
     dataFetched: false,
+    dataMoreFetched: false,
     isFetching: false,
     isFetchingMore: false,
-    error: false
+    error: false,
+    nextUrl: ''
 };
 export default function gifReducer(state = initialState, action) {
     switch (action.type) {
@@ -25,7 +28,8 @@ export default function gifReducer(state = initialState, action) {
                 ...state,
                 isFetching: false,
                 dataFetched: true,
-                data: action.data.results
+                data: action.data.results,
+                nextUrl: action.data.nextUrl
             };
         case FETCHING_GIF_DETAIL:
             return {
@@ -88,6 +92,26 @@ export default function gifReducer(state = initialState, action) {
                 ...state,
                 isFetching: false,
                 error: true
+            };
+        case FETCHING_GIF_DATA_MORE:
+            return {
+              ...state,
+              isFetchingMore: true
+            };
+      case FETCHING_GIF_DATA_MORE_SUCCESS:
+            return {
+              ...state,
+              isFetchingMore: false,
+              dataFetched: true,
+              dataMoreFetched: true,
+              data: [...state.data, ...action.dataMore.results],
+              nextUrl: action.dataMore.nextUrl
+            };
+      case FETCHING_GIF_DATA_MORE_FAILURE:
+            return {
+              ...state,
+              isFetchingMore: false,
+              error: true
             };
         default:
             return state;

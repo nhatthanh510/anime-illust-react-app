@@ -1,20 +1,142 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { fetchData } from '../actions';
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
+import { fetchRankingDetail, fetchRankingRelatedMore } from '../actions/ranking_fetch';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import Grid from './Grid/Grid.jsx';
 import ImageView from './ImageView/ImageView.jsx';
+import SocialShareButtons from './SocialShare/SocialShareButtons.jsx';
+import Progress from "react-progress-2";
+import renderHTML from 'react-render-html';
+import InfiniteScroll from 'react-infinite-scroller';
 
 class RankingDetail extends React.Component {
     constructor() {
         super();
+    }
+    componentDidMount() {
+        this.props.fetchRankingDetail(this.props.params.id);
+    }
+    componentWillReceiveProps(newProps) {
+
+        if (newProps.params != this.props.params) {
+            this.props.fetchRankingDetail(newProps.params.id);
+        }
+    }
+    componentDidUpdate() {
+        this.loadingProgress();
+    }
+    loadingProgress = () => {
+        if (this.props.rankingData.rankingDetailStatus.isFetching) {
+            Progress.show();
+        }
+        else if (this.props.rankingData.rankingDetailStatus.dataFetched) {
+            Progress.hideAll();
+            if (!this.props.rankingData.rankingRelatedStatus.isFetchingMore &&
+                !this.props.rankingData.rankingRelatedStatus.dataMoreFetched) {
+                window.scrollTo(0, 0);
+            }
+        }
+    }
+    renderImageViewer = () => {
+        if (this.props.rankingData.rankingDetailStatus.isFetching) {
+            return <div></div>;
+        } else {
+            if (this.props.rankingData.rankingDetailStatus.dataFetched) {
+                let rankingDetail = this.props.rankingData.dataDetail;
+                let imageArrays = [];
+                if (rankingDetail.meta_pages.length > 0) {
+                    for (let i = 0; i < rankingDetail.meta_pages.length; i++) {
+                        imageArrays.push(rankingDetail.meta_pages[i].image_urls.px_480mw);
+                    }
+                } else {
+                    imageArrays.push(rankingDetail.image_urls.px_480mw);
+                }
+                const imageViewSettings = {
+                    autoplaySpeed: 3000,
+                    autoplay: true,
+                    pauseOnHover: true,
+                    infinite: true,
+                    speed: 500,
+                    slidesToShow: 1,
+                    slidesToScroll: 1,
+                    dots: true
+                };
+                const imageViewData = {
+                    data: imageArrays,
+                    imageViewSettings: imageViewSettings
+                };
+                return (
+                    <ReactCSSTransitionGroup transitionName="anim" transitionAppear={true}
+                        transitionAppearTimeout={1000} transitionLeaveTimeout={1000} transitionEnterTimeout={1000}>
+                        <ImageView {...imageViewData} />
+                    </ReactCSSTransitionGroup>
+                );
+            }
+        }
+    }
+
+    renderDetailInfo = () => {
+        if (this.props.rankingData.rankingDetailStatus.isFetching) {
+            return <div></div>;
+        } else {
+            if (this.props.rankingData.rankingDetailStatus.dataFetched) {
+                let rankingDetail = this.props.rankingData.dataDetail;
+                return (
+                    <div className="portlet light image-info">
+                        <div className="portlet-title">
+                            <div className="caption">
+                                <a href="#">
+                                    <i className="fa fa-user-circle-o"></i>
+                                    <span className="caption-subject bold uppercase"> {rankingDetail.user.name}</span>
+                                </a>
+                            </div>
+                            <div className="caption caption-right">
+                                {this.initSocialShareButtons()}
+                            </div>
+                        </div>
+                        <div className="portlet-body">
+                            <div className="total-view">
+                                <i className="fa fa-star-o bold"> {rankingDetail.total_bookmarks}</i>
+                                <i className="fa fa-eye bold"> {rankingDetail.total_view}</i>
+                            </div>
+                            <p>
+                                {renderHTML(rankingDetail.caption)}
+                            </p>
+                            {this.renderImageTags(rankingDetail.tags)}
+                            <hr />
+                            <p className="artist-illust-label bold text-center"> More ilustrations from {rankingDetail.user.name}</p>
+                            {this.renderUserWorkSlider()}
+                        </div>
+                    </div>
+                )
+            }
+        }
+    }
+
+    renderImageTags = (tags) => {
+        if (tags) {
+            return (
+                <div>
+                    <p className="tag-label bold"><i className="fa fa-tags" /> Tags ({tags.length})</p>
+                    <div className="tags">
+                        {tags.map(function (tag, key) {
+                            return <span key={key} className="label label-default">#{tag.name}</span>;
+                        })}
+                    </div>
+                </div>
+            );
+        }
+    }
+
+    renderUserWorkSlider = () => {
         const settings = {
             infinite: true,
             speed: 500,
             slidesToShow: 4,
-            slidesToScroll: 1,
+            slidesToScroll: 4,
             responsive: [
                 {
                     breakpoint: 1024,
@@ -32,61 +154,92 @@ class RankingDetail extends React.Component {
                         slidesToScroll: 2
                     }
                 }
-            ]
+            ],
+            lazyLoad: true
         };
-
-        const imageViewSettings = {
-            infinite: true,
-            speed: 500,
-            slidesToShow: 1,
-            slidesToScroll: 1,
-            dots: true,
-            adaptiveHeight: true
-        };
-
-        const imageViewData = {
-            data : ["./images/test/5.png", "./images/test/4.jpg", "./images/test/4.jpg"],
-            imageViewSettings : imageViewSettings
-        };
-
-        this.state = {
-            settings: settings,
-            imageViewData : imageViewData
-        };
-    }
-    componentDidMount() {
-        if (!this.props.myData.dataFetched) {
-            this.props.fetchData();
+        if (this.props.userWorkData.userWorkStatus.isFetching) {
+            return;
+        } else {
+            if (this.props.userWorkData.userWorkStatus.dataFetched) {
+                return (
+                    <Slider {...settings}>
+                        {this.props.userWorkData.data.map(function (userWork, key) {
+                            return (
+                                <div key={key} className="slider-item">
+                                    <a href={"#/ranking/detail/" + userWork.id}>
+                                        <img className="img-responsive" src={userWork.image_urls.px_128mw} />
+                                    </a>
+                                </div>
+                            );
+                        })}
+                    </Slider>
+                )
+            }
         }
     }
-    initGrid = () => {
+
+    initSocialShareButtons = () => {
+        let socialShareButtonSettings = {
+            url: window.location.href,
+            facebook: true,
+            twitter: true,
+            googleplus: true
+        };
+        return (
+            <SocialShareButtons {...socialShareButtonSettings} />
+        );
+    };
+
+    initRelatedGrid = () => {
         let gridData = {
-            data: this.props.myData.data,
+            lazyloading: true,
+            data: this.props.rankingData.rankingRelatedStatus.dataFetched ? this.props.rankingData.dataRelated : [],
             columns: {
                 columnsCount: 3,
                 responsive: {
                     lg: 3,
                     md: 3,
-                    sm: 2,
+                    sm: 3,
                     xs: 1,
                 },
                 content: {
                     format: (item) => {
                         return (
-                            <div>
-                                <div className="portlet light">
-                                    <div className="portlet-title">
-                                        <div className="caption">
-                                            <img width="40px" src={item.avatar} className="img-circle" />
-                                            <span className="caption-subject bold uppercase">{item.name}</span>
-                                        </div>
-                                        <div className="caption caption-right font-yellow-gold">
-                                            <i className="fa fa-hashtag font-yellow-gold"></i>
-                                            <span className="caption-subject uppercase">{item.rank}</span>
+                            <div className="portlet light hvr-float">
+                                <div className="portlet-title">
+                                    <div className="caption">
+                                        <div className="caption-subject bold">
+                                            <a>
+                                                Artist: {item.title}
+                                            </a>
                                         </div>
                                     </div>
-                                    <div className="portlet-body">
-                                        <img className="illust-thumbnail img-responsive" src={item.mainImage} />
+                                </div>
+                                <div className="portlet-body">
+                                    <div className="illust-container">
+                                        <a href={"#/ranking/detail/" + item.id}>
+                                            <img className="img-responsive" src={item.image_urls.px_480mw} />
+                                            {
+                                                item.meta_pages.length > 0 ?
+                                                    <div className="illust-count">
+                                                        <div className="illust-count-overlay"></div>
+                                                        <div className="illust-count-content">
+                                                            <img src="/images/icon/ic_photos.svg" /> {item.meta_pages.length}
+                                                        </div>
+                                                    </div> : <span />
+                                            }
+                                        </a>
+                                    </div>
+                                    <hr />
+                                    <div className=" container-fluid bottom-info">
+                                        <div className="row">
+                                            <div className="bookmark col-md-6 col-xs-6 text-center">
+                                                <i className="fa fa-star"></i> {item.total_bookmarks}
+                                            </div>
+                                            <div className="view col-md-6 col-xs-6 text-center">
+                                                <i className="fa fa-eye"></i> {item.total_view}
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -95,69 +248,42 @@ class RankingDetail extends React.Component {
                 }
             }
         };
-        return gridData;
+        if (this.props.rankingData.rankingRelatedStatus.isFetching) {
+            return <div></div>;
+        } else {
+            return (
+                <ReactCSSTransitionGroup transitionName="anim" transitionAppear={true}
+                    transitionAppearTimeout={1000} transitionLeaveTimeout={1500} transitionEnterTimeout={1500}>
+                    <Grid {...gridData} />
+                </ReactCSSTransitionGroup>
+            );
+        }
+    };
+    loadMoreRelatedIllusts = () => {
+        if (this.props.rankingData.nextURL && !this.props.rankingData.rankingRelatedStatus.isFetchingMore) {
+            this.props.fetchRankingRelatedMore(this.props.rankingData.nextURL);
+        } else {
+            return;
+        }
     };
     render() {
         return (
             <div className="container-fluid image-detail">
+                <Progress.Component />
                 <div className="row">
-                    <div className="col-md-5">
+                    <div className="col-md-offset-1 col-md-5 col-sm-6">
                         <div className="portlet light primary-image">
                             <div className="portlet-body">
-                                <ImageView {...this.state.imageViewData}/>
+                                {this.renderImageViewer()}
                             </div>
                         </div>
                     </div>
-                    <div className="col-md-5">
-                        <div className="portlet light image-info">
-                            <div className="portlet-title">
-                                <div className="caption">
-                                    <img width="40px" src="./images/test/avatar.png" className="img-circle" />
-                                    <span className="caption-subject bold uppercase"> サッカン 1</span>
-                                </div>
-                            </div>
-                            <div className="portlet-body">
-                                <div className="total-view">
-                                    <i className="fa fa-star-o bold"> 15.297</i>
-                                    <i className="fa fa-eye bold"> 73.831</i>
-                                </div>
-                                <p>年夏おすすめオンラインゲー</p>
-                                <p>年夏おすすめオンラインゲオンラインゲームをラームをランキング形式でご紹介！提携 年夏おすすめオンラインゲームをランキング形式でご紹介！提携</p>
-                                <p className="tag-label bold"><i className="fa fa-tags" /> Tags (10)</p>
-                                <div className="tags">
-                                    <span className="label label-default">#式でご</span>
-                                    <span className="label label-default">#提携</span>
-                                    <span className="label label-default">#グ形</span>
-                                    <span className="label label-default">#ムを</span>
-                                    <span className="label label-default">#キング形式</span>
-                                    <span className="label label-default">#年夏おすす</span>
-                                    <span className="label label-default">#ライ</span>
-                                    <span className="label label-default">#ンラインゲーム</span>
-                                    <span className="label label-default">#インゲームをランキング</span>
-                                    <span className="label label-default">#年夏お</span>
-                                     <span className="label label-default">#ムを</span>
-                                    <span className="label label-default">#キング形式</span>
-                                    <span className="label label-default">#年夏おすす</span>
-                                    <span className="label label-default">#ライ</span>
-                                    <span className="label label-default">#ンラインゲーム</span>
-                                    <span className="label label-default">#インゲームをランキング</span>
-                                </div>
-                                <hr />
-                                <p className="artist-illust-label bold text-center"> More ilustrations from サッカン</p>
-                                <Slider {...this.state.settings}>
-                                    <div className="slider-item"><img className="img-responsive" src="./images/test/1.jpg" /></div>
-                                    <div className="slider-item"><img className="img-responsive" src="./images/test/2.jpg" /></div>
-                                    <div className="slider-item"><img className="img-responsive" src="./images/test/3.jpg" /></div>
-                                    <div className="slider-item"><img className="img-responsive" src="./images/test/4.jpg" /></div>
-                                    <div className="slider-item"><img className="img-responsive" src="./images/test/1.jpg" /></div>
-                                    <div className="slider-item"><img className="img-responsive" src="./images/test/2.jpg" /></div>
-                                </Slider>
-                            </div>
-                        </div>
+                    <div className="col-md-5 col-sm-6">
+                        {this.renderDetailInfo()}
                     </div>
                 </div>
                 <div className="row related-works grid-layout">
-                    <div className="col-md-10">
+                    <div className="col-md-12">
                         <div className="portlet light">
                             <div className="portlet-title">
                                 <div className="caption">
@@ -166,12 +292,18 @@ class RankingDetail extends React.Component {
                             </div>
                             <div className="portlet-body">
                                 {
-                                    this.props.myData.isFetching && <div>Loading</div>
-                                }
-                                {this.props.myData.data.length ?
-                                    (
-                                        <Grid {...this.initGrid()} />
-                                    ) : null
+                                    <InfiniteScroll
+                                        initialLoad={false}
+                                        pageStart={0}
+                                        loadMore={this.loadMoreRelatedIllusts}
+                                        hasMore={this.props.rankingData.nextURL ? true : false}
+                                        threshold={5}
+                                        loader={
+                                            <div className="loader">
+                                                <div className="ball-pulse"><div></div><div></div><div></div></div>
+                                            </div>}>
+                                        {this.initRelatedGrid()}
+                                    </InfiniteScroll>
                                 }
                             </div>
                         </div>
@@ -185,13 +317,15 @@ class RankingDetail extends React.Component {
 
 const mapStateToProps = state => {
     return {
-        myData: state.myData
+        rankingData: state.rankingData,
+        userWorkData: state.userWorkData
     };
 };
 
 function mapDispatchToProps(dispatch) {
     return {
-        fetchData: () => dispatch(fetchData())
+        fetchRankingDetail: (id) => dispatch(fetchRankingDetail(id)),
+        fetchRankingRelatedMore: (nextURL) => dispatch(fetchRankingRelatedMore(nextURL))
     };
 }
 

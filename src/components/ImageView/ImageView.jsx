@@ -13,6 +13,9 @@ class ImageView extends React.Component {
                     for (var i = 0; i < props.data.length; i++) {
                         rows.push(<div key={i}><img className="img-responsive" src={props.data[i]} /></div>);
                     }
+                    if (props.data.length > 10) {
+                        props.imageViewSettings.dots = false;
+                    }
                     return <Slider {...props.imageViewSettings}>{rows}</Slider>;
                 } else {
                     return <img className="img-responsive" src={props.data[0]} />;

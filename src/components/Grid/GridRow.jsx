@@ -6,7 +6,7 @@ class GridRow extends React.Component {
         this.renderCol = (props) => {
             let cols = [];
             for (var i = props.index; i < props.index + props.columns.columnsCount && i < props.data.length; i++) {
-                cols.push(<GridCol key={i} data={props.data[i]} columns={props.columns}  lazyloading={props.lazyloading}/>);
+                cols.push(<GridCol key={i} data={props.data[i]} columns={props.columns} index={i} lazyloading={props.lazyloading}/>);
             }
             return cols;
         };

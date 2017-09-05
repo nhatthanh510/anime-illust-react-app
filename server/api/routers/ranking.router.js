@@ -8,5 +8,7 @@ module.exports = (app, root) => {
     router.route('/list').get(handler.list);
     router.route('/detail').get(handler.get);
     router.route('/search').get(handler.search);
+    router.route('/related').get(handler.related);
+    router.route('/userwork').get(handler.user_work);
     app.use(root, router);
 };

@@ -7,7 +7,6 @@ const DEFAULT_AUTOCOMPLETE_KEYWORD = '';
 
 module.exports = {
     search: (req, res) => {
-      console.log(req.query.tag);
         let query = req.query.tag,
         pos = req.query.pos;
 

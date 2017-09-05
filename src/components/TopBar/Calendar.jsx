@@ -1,11 +1,22 @@
 import React, { Component } from 'react';
 import DatePicker from 'react-datepicker';
 import moment from 'moment';
+import 'react-datepicker/dist/react-datepicker.css';
 
 class Calendar extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      startDate: moment()
+    };
   }
+
+  handleChange = (date) => {
+    this.setState({
+      startDate: date
+    });
+    this.props.filterByDateTime(moment(date).format('YYYY-MM-DD'));
+  };
 
   render() {
     return(
@@ -17,6 +28,8 @@ class Calendar extends Component {
                 <DatePicker
                   className="form-control input-circle"
                   withPortal
+                  selected={this.state.startDate}
+                  onChange={this.handleChange}
                 />
               </div>
             </h1>

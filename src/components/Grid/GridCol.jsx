@@ -1,6 +1,7 @@
 import React from 'react';
 import LazyLoad from 'react-lazyload';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
+import GridItemPlaceHolder from './GridItemPlaceHolder.jsx';
 class GridCol extends React.Component {
     constructor(props) {
         super(props);
@@ -9,14 +10,13 @@ class GridCol extends React.Component {
                 'col-md-' + 12 / props.columns.responsive.md + ' ' +
                 'col-sm-' + 12 / props.columns.responsive.sm + ' ' +
                 'col-xs-' + 12 / props.columns.responsive.xs;
-            let colContent = props.columns.content.format(props.data);
-            console.log(props.lazyloading)
+            let colContent = props.columns.content.format(props.data, props.index);
             if (props.lazyloading) {
                 colContent = (
-                    <LazyLoad height={200} offset={100}>
+                    <LazyLoad height={100} offset={[-100, 0]} placeholder={<GridItemPlaceHolder/>}>
                         <ReactCSSTransitionGroup transitionName="gridLazyLoadingAnim" transitionAppear={true} 
                             transitionAppearTimeout={700} transitionEnter={false} transitionLeave={false}>
-                            {props.columns.content.format(props.data)}
+                            {props.columns.content.format(props.data, props.index)}
                         </ReactCSSTransitionGroup>
                     </LazyLoad>
                 );

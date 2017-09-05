@@ -6,7 +6,7 @@ const initialState = {
   dataFetchedAutoComplete: false,
   isFetchingAutoComplete: false,
   error: false,
-  autoCompleteData: {}
+  autoCompleteData: []
 };
 
 export default function gifAutoCompleteReducer(state = initialState, action) {
@@ -15,6 +15,7 @@ export default function gifAutoCompleteReducer(state = initialState, action) {
         return {
           ...state,
           isFetchingAutoComplete: true,
+          dataFetchedAutoComplete: false
         };
     case FETCHING_GIF_AUTOCOMPLETE_SUCCESS:
       return {

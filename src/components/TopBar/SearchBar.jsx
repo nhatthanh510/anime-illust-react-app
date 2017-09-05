@@ -1,66 +1,74 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import {fetchGifAutoComplete, fetchGifData} from '../../actions/gif_fetch';
 import Select from 'react-select';
 import 'react-select/dist/react-select.css';
-import {bindActionCreators} from 'redux';
-
-
+import _ from 'lodash';
+import '../../styles/gif.scss';
 
 class SearchBar extends Component {
   constructor(props) {
     super(props);
-  }
-
-  getInitialState() {
-    return {
-      value: ''
+    this.state = {
+      term : ''
     };
   }
 
-  handleSubmit = () => {
-    this.props.search({term: this.input.value});
+  static defaultProps = {
+    noResultsText: '',
+    filterByMode: () => {}
   };
 
-  getOptions = (input, callback) => {
-     if (this.props.autoCompleteGifData.dataFetchedAutoComplete) {
-       var data = {
-         options : this.props.autoCompleteGifData.autoCompleteData,
-         complete : true
-       };
+  handleSubmit = _.debounce(() => {
+    let term = this.state.term.trim();
+    if (!term) {
+      return false;
+    }
+    this.props.search({term: this.state.term});
+  }, 300);
 
-       callback(null, data);
+  onInputChange = _.debounce(( value ) => {
+    if (typeof this.props.onFetchingData == 'function') {
+      this.props.onFetchingData(value);
+    }
+    this.setState({term: value});
+  }, 300);
+
+  onValueClick = ( value ) => {
+    this.setState({term: value.value});
+  };
+
+  onInputKeyDown = (e) => {
+    switch (e.keyCode) {
+      case 13:
+        _.debounce(this.handleSubmit(e), 300);
+        break;
     }
   };
 
-  onInputChange = ( value ) => {
-    this.props.fetchGifAutoComplete({term: value});
-  };
-
-  onValueClick = ( value ) => {
-    this.props.fetchGifData({term: value.value});
+  filterByModeHandler = (mode) => {
+    this.props.filterByMode(mode);
   };
 
   render() {
-    console.log('Autocomplete');
-    console.log(this.props.autoCompleteGifData.dataFetchedAutoComplete);
-    console.log(this.props.autoCompleteGifData.autoCompleteData)
     return(
         <div className="page-toolbar">
           <div className="btn-group">
             <div className="portlet-input input-inline">
               <div className="input-icon right">
-                <form onSubmit={ this.handleSubmit}>
-                  <i className="fa fa-search"></i>
-                  <input type="submit"/>
-                  <input type="text" className="form-control input-circle" placeholder="search..." ref={ (input) => {this.input = input }} />
-                  <Select.Async
+                <form onSubmit={ this.handleSubmit} className="search-form">
+                  <Select
                     name="form-field-name"
-                    value=""
-                    loadOptions={this.getOptions}
+                    value={this.state.term}
+                    options={this.props.options}
                     onInputChange={this.onInputChange}
                     onChange={this.onValueClick}
+                    onBlurResetsInput={false}
+                    isLoading={this.props.isLoading}
+                    onInputKeyDown={this.onInputKeyDown}
+                    noResultsText={this.props.noResultsText}
                   />
+                  <a className="btn blue-chambray search-button" href="javascript:;" onClick={this.handleSubmit}>
+                    <i className="fa fa-photo"></i> Search
+                  </a>
                 </form>
               </div>
             </div>
@@ -72,16 +80,16 @@ class SearchBar extends Component {
             </a>
             <ul className="dropdown-menu pull-right">
               <li>
-                <a href="javascript:;">
-                  <i className="fa fa-pencil"></i> Edit </a>
+                <a href="javascript:;" onClick={this.filterByModeHandler.bind(null, 'day')}>
+                  <i className="fa fa-pencil"></i> By Day </a>
               </li>
               <li>
-                <a href="javascript:;">
-                  <i className="fa fa-trash-o"></i> Delete </a>
+                <a href="javascript:;" onClick={this.filterByModeHandler.bind(null, 'month')}>
+                  <i className="fa fa-trash-o"></i> By Month </a>
               </li>
               <li>
-                <a href="javascript:;">
-                  <i className="fa fa-ban"></i> Ban </a>
+                <a href="javascript:;" onClick={this.filterByModeHandler.bind(null, 'year')}>
+                  <i className="fa fa-ban"></i> By Year </a>
               </li>
               <li className="divider"> </li>
               <li>
@@ -94,16 +102,4 @@ class SearchBar extends Component {
   }
 }
 
-const mapStateToProps = state => {
-  return {
-    gifData: state.gifData,
-    autoCompleteGifData: state.autocompleteData
-  };
-};
-
-function mapDispatchToProps(dispatch) {
-  return {
-    ...bindActionCreators({ fetchGifData, fetchGifAutoComplete }, dispatch)
-  };
-}
-export default connect(mapStateToProps, mapDispatchToProps)(SearchBar);
+export default SearchBar;
